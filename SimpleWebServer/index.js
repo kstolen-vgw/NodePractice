@@ -25,6 +25,16 @@ app.get('/amiondocker', (req, res) => {
     res.send('no')
 })
 
+app.get('/argument', (req, res) => {
+    const args = require('minimist')(process.argv.slice(2))
+    if (args.argument)
+    {
+        res.send(args.argument)
+        return
+    }
+    res.send('no argument')    
+})
+
 const server = app.listen(PORT, HOST)
 
 process.on('SIGTERM', () => {
