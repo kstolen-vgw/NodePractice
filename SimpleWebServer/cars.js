@@ -1,5 +1,5 @@
 const cars = [
-    "red cars",
+    "red car",
     "blue car",
     "big car"
 ]
