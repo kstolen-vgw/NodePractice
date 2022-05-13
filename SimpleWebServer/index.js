@@ -16,6 +16,15 @@ app.get('/kill', (req, res) => {
     process.kill(process.pid, 'SIGTERM')
 })
 
+app.get('/amiondocker', (req, res) => {
+    if (process.env.IS_DOCKER === "true")
+    {
+        res.send('yes')
+        return
+    }
+    res.send('no')
+})
+
 const server = app.listen(PORT, HOST)
 
 process.on('SIGTERM', () => {
