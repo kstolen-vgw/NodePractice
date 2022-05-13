@@ -11,6 +11,16 @@ app.get('/', (req, res) => {
     res.send('hello WOLRD')
 })
 
+app.get('/kill', (req, res) => {
+    res.send('killed')
+    process.kill(process.pid, 'SIGTERM')
+})
+
 const server = app.listen(PORT, HOST)
 
+process.on('SIGTERM', () => {
+    server.close(() => {
+        console.log('Process terminated')
+    })
+})
 console.log(`running on http://${HOST}:${PORT}/`)
