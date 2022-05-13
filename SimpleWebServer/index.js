@@ -1,6 +1,7 @@
 'use strict'
 
 const express = require('express')
+const cars = require('./cars')
 
 const PORT = 3000
 const HOST = '0.0.0.0'
@@ -33,6 +34,10 @@ app.get('/argument', (req, res) => {
         return
     }
     res.send('no argument')    
+})
+
+app.get('/cars', (req, res) => {    
+    res.send(cars)
 })
 
 const server = app.listen(PORT, HOST)
