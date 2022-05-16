@@ -5,7 +5,8 @@
     "author": "ME",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon index.js"
+        "start": "nodemon index.js",
+        "docker": "docker-compose up"
     },
     "dependencies": {
         "dotenv": "^16.0.1",
