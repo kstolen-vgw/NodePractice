@@ -40,30 +40,33 @@ app.get('/cars', (req, res) => {
     res.send(cars)
 })
 
-let asyncMethod = async () => "4. Async/await"
+let asyncMethod = async (log) => log
 
 app.get('/nexttickasync', async (req, res) => {
     console.log('')
 
     //this will execute last
-    setTimeout(() => {
-        console.log("1. setTimeout")
-    }, 0)
+    setTimeout(() => console.log("1. setTimeout"), 0)
 
-    // wait for this to complete
-    process.nextTick(() => {
-        console.log("2. nextTick")
-    })
+    setImmediate(() => console.log("2. setImmediate"))
 
-    // then wait for this
-    new Promise((resolve, reject) => resolve('3. Promise'))
+    // wait for this
+    new Promise((resolve, reject) => resolve('2. Promise'))
         .then(console.log)
     
-    // then wait for this
-    await asyncMethod()
+    // wait for this
+    await asyncMethod("3. async method")
         .then(console.log)
+    
+    // wait for this to complete
+    process.nextTick(() => {
+        console.log("4. nextTick")
+    })
 
+    // by awaiting this, our macroqueue will be executed 
+    // prior to resolving the promise
     await new Promise((resolve, reject) => 
+        // wait for this
         setTimeout(() =>    
             resolve("5. promise timeout", 100)))
         .then(console.log)
@@ -76,33 +79,34 @@ app.get('/nexttickasync', async (req, res) => {
 app.get('/nexttick', (req, res) => {
     console.log('')
     
-    // execute this at the end of the following tick
-    setTimeout(() => {
-        console.log("1. setTimeout")
-    }, 0)
+    // queue this into the macrotask queue
+    setTimeout(() => console.log("1. setTimeout"), 0)
 
-    // execute this at the beginning of the next tick
-    process.nextTick(() => {
-        console.log("2. nextTick")
-    })
+    // insert this before setTimeout into the macrotask queue??
+    setImmediate(() => console.log("2. setImmediate"))
 
-    // queue this after .nextTick
+    // queue into the promises microtask queue
     new Promise((resolve, reject) => resolve('3. Promise'))
         .then(console.log)
 
-    // queue this after promise
-    asyncMethod()
+    // queue this into the promises microtask queue
+    asyncMethod("4. async method")
         .then(console.log)
+    
+    // quque this into the nextTick queue
+    process.nextTick(() => {
+        console.log("5. nextTick")
+    })
 
     // queue this after async method
     new Promise((resolve, reject) =>
         // queue this after previous setTimeout 
         setTimeout(() =>    
-            resolve("5. promise timeout", 100)))
+            resolve("6. promise timeout", 100)))
         .then(console.log)
 
     // execute this now
-    console.log("6. current tick")
+    console.log("7. current tick")
 
     res.send()
 })
