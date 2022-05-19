@@ -8,6 +8,12 @@ const HOST = '0.0.0.0'
 
 const app = express();
 
+app.use(
+    express.urlencoded({
+        extended: true,
+    }))
+app.use(express.json())
+
 app.get('/', (req, res) => {
     res.send('hello WOLRD')
 })
@@ -108,6 +114,11 @@ app.get('/nexttick', (req, res) => {
     // execute this now
     console.log("7. current tick")
 
+    res.send()
+})
+
+app.post('/todos', (req, res) => {
+    console.log(req.body.todo)
     res.send()
 })
 
