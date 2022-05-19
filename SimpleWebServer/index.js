@@ -3,6 +3,7 @@
 const express = require('express')
 const cars = require('./cars')
 const path = require('path')
+const fs = require('fs/promises')
 
 const PORT = 3000
 const HOST = '0.0.0.0'
@@ -129,6 +130,20 @@ app.get('/nexttick', (req, res) => {
 
 app.post('/todos', (req, res) => {
     console.log(req.body.todo)
+    res.send()
+})
+
+app.post('/writefile', async (req, res) => {
+    try
+    {
+        var content = req.body.write
+        await fs.appendFile('theFile.txt', content)
+    }
+    catch (err)
+    {
+        console.log(err)
+        res.status(500).send({error: 'failed to write to file'})
+    }
     res.send()
 })
 
