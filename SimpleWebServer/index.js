@@ -2,6 +2,7 @@
 
 const express = require('express')
 const cars = require('./cars')
+const path = require('path')
 
 const PORT = 3000
 const HOST = '0.0.0.0'
@@ -13,6 +14,15 @@ app.use(
         extended: true,
     }))
 app.use(express.json())
+
+app.get('/path', (req, res) => {
+    console.log(path.join('$','hello','world')) // $/hello/world
+    console.log(path.join('C:','hello','world')) // C:/hello/world
+    console.log(path.join('/','hello','world')) // /hello/world
+    console.log(path.join('hello','world')) // hello/world
+
+    res.send()
+})
 
 app.get('/', (req, res) => {
     res.send('hello WOLRD')
